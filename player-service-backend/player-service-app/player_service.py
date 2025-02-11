@@ -19,8 +19,8 @@ class PlayerService:
         return response
 
     def search_by_player(self, player_id):
-        query = "SELECT * FROM players WHERE playerId='{}'".format(player_id)
-        players = self.cursor.execute(query).fetchall()
+        query = "SELECT * FROM players WHERE playerId like ?"
+        players = self.cursor.execute(query, (player_id + '%', )).fetchall()
         columns = [column[0] for column in self.cursor.description]
         response = []
 

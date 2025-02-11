@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
 import {validateId, validateCountryCode, santifizeInput} from "../utils";
-import useDatatFetcher from "../utils/DataFetcher";
-import fetchData from "../utils/DataFetcher";
+import fetchData, {fetchSearchData} from "../utils/DataFetcher";
 
 function PlayerResults() {
 
     const [players, setPlayers] = useState([]);
+    const [searchPlayerId, setSearchPlayerId] = useState('')
+    const [searching, setSearching] = useState(false);
 
 
     useEffect(() => {
-
         fetchData()
             .then(data => {
                 const subsetOfPlayers = data.players.slice(0,10);
@@ -19,11 +19,28 @@ function PlayerResults() {
             })
     }, []);
 
+    useEffect(() => {
+        console.log('effect, ', searchPlayerId);
+
+        if (searching) {
+            fetchSearchData(searchPlayerId)
+            .then(data => {
+                const subsetOfPlayers = data.player.slice(0,10);
+                setPlayers(subsetOfPlayers)
+                console.log(subsetOfPlayers)
+            })
+            setSearching(false)
+        }
+
+    }, [searching, searchPlayerId]);
+
     const handleSearchById = (input) => {
 
         if (validateId(input)) {
             // do something
+            setSearching(true)
         }
+
     }
 
     const handleSearchByCountry = (input) => {
@@ -38,7 +55,7 @@ function PlayerResults() {
          <div className="player-results-header">
              <div className="player-results-search">
                  <label>Player id:</label>
-                 <input type=""/>
+                 <input type="text" onChange={e => {setSearchPlayerId(e.target.value)}}/>
                  <button onClick={handleSearchById}>Submit</button>
              </div>
              <div className="player-results-search">
