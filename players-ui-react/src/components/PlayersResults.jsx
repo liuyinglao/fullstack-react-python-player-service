@@ -51,7 +51,7 @@ function PlayerResults() {
              {/* Body of results should go here */}
              {players.map((player) => {
                  return(
-                     <div style={{"display": "flex", "gap": "1vh"}}>
+                     <div key={player.playerId} style={{"display": "flex", "gap": "1vh"}}>
                         <div>{player.playerId}</div>
                         <div>{player.birthCountry}</div>
                      </div>
